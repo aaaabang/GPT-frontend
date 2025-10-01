@@ -1,0 +1,7 @@
+/* App.css - 确保应用铺满整个屏幕 */
+#root {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}

@@ -1,8 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@import "tailwindcss";
 
 html,
 body {
@@ -12,4 +8,9 @@ body {
 
 #root {
   height: 100%;
+}
+
+@theme static {
+  --color-primary: var(--color-rose-100);
+  --color-secondary: var(--color-rose-200);
 }

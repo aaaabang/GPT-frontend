@@ -1,13 +1,36 @@
-import React from "react";
-
 export default function Sidebar() {
+  const buttonList = [
+    { id: 1, label: "按钮1" },
+    { id: 2, label: "按钮2" },
+    { id: 3, label: "按钮3" },
+  ];
   return (
-    <aside className="w-1/4 border-r p-4">
-      <h2 className="font-bold mb-4">Sidebar</h2>
-      <ul className="space-y-2">
-        <li className="p-2 bg-gray-100 rounded">Chat 1</li>
-        <li className="p-2 bg-gray-100 rounded">Chat 2</li>
-      </ul>
-    </aside>
+    <div className="flex flex-col w-full h-full justify-between">
+      <div className="flex flex-col p-2 space-y-2">
+        <button className="p-2 rounded-md bg-primary text-black border border-black-500 hover:bg-secondary">
+          New Chat
+        </button>
+        {/* 根据 list 渲染按钮 */}
+        <div className="flex flex-col space-y-2 mt-2">
+          {buttonList.map((item, idx) => (
+            <button
+              key={idx}
+              className="px-4 py-2 rounded bg-primary text-black hover:bg-secondary"
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-col p-2 space-y-2">
+        <hr className="" />
+        <button className="p-5 rounded-md bg-primary items-center text-black border border-black-200 hover:bg-secondary">
+          Clear Conversations
+        </button>
+        <button className="p-5 rounded-md bg-primary items-center text-black border border-black-200 hover:bg-secondary">
+          Settings
+        </button>
+      </div>
+    </div>
   );
 }

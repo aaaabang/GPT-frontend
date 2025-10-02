@@ -6,18 +6,13 @@ import Sidebar from "./Sidebar";
 // App.jsx
 export default function App() {
   return (
-    <div className="h-screen flex w-full bg-blue-50">
-      {/* 左侧侧边栏 */}
-      <aside className="w-64 border-r p-4">
-        <h2 className="font-bold mb-4">Sidebar</h2>
-        <ul className="space-y-2">
-          <li className="p-2 bg-gray-100 rounded">Chat 1</li>
-          <li className="p-2 bg-gray-100 rounded">Chat 2</li>
-        </ul>
-      </aside>
+    <div className="flex w-screen h-screen">
+      <div className="flex w-80 h-full p-1 bg-primary ">
+        <Sidebar />
+      </div>
 
       {/* 右侧聊天窗口 */}
-      <main className="flex-1 flex flex-col">
+      <main className="flex w-full flex-col">
         {/* 消息列表（可滚动） */}
         <section className="flex-1 overflow-auto p-4 bg-gray-50">
           <div className="mb-2">Message 1</div>

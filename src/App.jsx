@@ -3,8 +3,40 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import Sidebar from "./Sidebar";
+import MessageList from "./MessageList";
 // App.jsx
 export default function App() {
+  const messages = [
+    { sender: "user", text: "Hello!" },
+    { sender: "gpt", text: "Hi there! How can I assist you today?" },
+    { sender: "user", text: "Can you tell me a joke?" },
+    {
+      sender: "gpt",
+      text: "Why did the scarecrow win an award? Because he was outstanding in his field!",
+    },
+    { sender: "user", text: "Hello!" },
+    { sender: "gpt", text: "Hi there! How can I assist you today?" },
+    { sender: "user", text: "Can you tell me a joke?" },
+    {
+      sender: "gpt",
+      text: "Why did the scarecrow win an award? Because he was outstanding in his field! long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text ",
+    },
+    { sender: "user", text: "Hello!" },
+    { sender: "gpt", text: "Hi there! How can I assist you today?" },
+    { sender: "user", text: "Can you tell me a joke?" },
+    {
+      sender: "gpt",
+      text: "Why did the scarecrow win an award? Because he was outstanding in his field!",
+    },
+    { sender: "user", text: "Hello!" },
+    { sender: "gpt", text: "Hi there! How can I assist you today?" },
+    { sender: "user", text: "Can you tell me a joke?" },
+    {
+      sender: "gpt",
+      text: "Why did the scarecrow win an award? Because he was outstanding in his field!",
+    },
+  ];
+
   return (
     <div className="flex w-screen h-screen">
       <div className="flex w-80 h-full p-2 bg-primary ">
@@ -14,11 +46,8 @@ export default function App() {
       {/* 右侧聊天窗口 */}
       <main className="flex w-full flex-col">
         {/* 消息列表（可滚动） */}
-        <section className="flex-1 overflow-auto p-4 bg-gray-50">
-          <div className="mb-2">Message 1</div>
-          <div className="mb-2">Message 2</div>
-          <div className="mb-2">Message 3</div>
-        </section>
+
+        <MessageList messages={messages} />
 
         {/* 底部输入区 */}
         <footer className="p-4 border-t">

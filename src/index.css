@@ -4,6 +4,7 @@ html,
 body {
   height: 100%;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  overflow: hidden;
 }
 
 #root {

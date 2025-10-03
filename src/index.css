@@ -12,6 +12,25 @@ body {
 }
 
 @theme static {
-  --color-primary: var(--color-rose-100);
-  --color-secondary: var(--color-rose-200);
+  --color-primary-50: var(--color-violet-50);
+  --color-primary-100: var(--color-violet-100);
+  --color-primary-200: var(--color-violet-200);
+  --color-primary-300: var(--color-violet-300);
+  --color-primary-400: var(--color-violet-400);
+  --color-primary: var(--color-violet-500);
+  --color-primary-600: var(--color-violet-600);
+  --color-primary-700: var(--color-violet-700);
+  --color-primary-800: var(--color-violet-800);
+  --color-primary-900: var(--color-violet-900);
+
+  --secondary-50: var(--color-indigo-50);
+  --secondary-100: var(--color-indigo-100);
+  --secondary-200: var(--color-indigo-200);
+  --secondary-300: var(--color-indigo-300);
+  --secondary-400: var(--color-indigo-400);
+  --secondary: var(--color-indigo-500);
+  --secondary-600: var(--color-indigo-600);
+  --secondary-700: var(--color-indigo-700);
+  --secondary-800: var(--color-indigo-800);
+  --secondary-900: var(--color-indigo-900);
 }

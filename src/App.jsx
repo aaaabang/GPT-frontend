@@ -43,7 +43,7 @@ export default function App() {
 
   return (
     <div className="flex w-screen h-screen">
-      <div className="flex w-80 h-full p-2 bg-primary ">
+      <div className="flex w-80 h-full p-2 bg-primary-400 ">
         <Sidebar />
       </div>
 

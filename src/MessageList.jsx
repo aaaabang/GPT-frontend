@@ -7,15 +7,15 @@ function MessageItem({ sender, text }) {
   let item = null;
   if (sender === "user") {
     item = (
-      <div className="flex bg-white w-full px-15 py-8">
-        <img src={userIcon} alt="user" className="w-6 h-6 mr-2 bg-yellow-200" />
+      <div className="flex bg-white w-full px-40 py-8">
+        <img src={userIcon} alt="user" className="w-6 h-6 mr-4 bg-yellow-200" />
         <span className="flex-1">{text}</span>
       </div>
     );
   } else {
     item = (
-      <div className="flex bg-gray-100 px-15 py-8">
-        <img src={gptIcon} alt="gpt" className="w-6 h-6 mr-2 bg-blue-200" />
+      <div className="flex bg-gray-100 px-40 py-8">
+        <img src={gptIcon} alt="gpt" className="w-6 h-6 mr-4 bg-blue-200" />
         <span className="flex-1">{text}</span>
       </div>
     );
@@ -30,6 +30,7 @@ function MessageList({ messages }) {
       {messages.map((msg, index) => (
         <MessageItem key={index} sender={msg.sender} text={msg.text} />
       ))}
+      <div className="h-35 flex-shrink-0"></div>
     </div>
   );
 }

@@ -35,6 +35,10 @@ export default function App() {
       sender: "gpt",
       text: "Why did the scarecrow win an award? Because he was outstanding in his field!",
     },
+    {
+      sender: "user",
+      text: "long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text end",
+    },
   ];
 
   return (
@@ -44,19 +48,17 @@ export default function App() {
       </div>
 
       {/* 右侧聊天窗口 */}
-      <main className="flex w-full flex-col">
+      <main className="flex w-full flex-col items-center relative bg-transparent">
         {/* 消息列表（可滚动） */}
-
         <MessageList messages={messages} />
 
-        {/* 底部输入区 */}
-        <footer className="p-4 border-t">
-          <input
-            type="text"
+        {/* 输入框只在聊天区底部固定，不遮盖 sidebar */}
+        <div className="absolute bottom-0 left-0 right-0 flex bg-transparent backdrop-blur px-30 pb-10">
+          <textarea
             placeholder="Type a message..."
-            className="w-full border rounded p-2"
+            className="flex h-30 w-full border border-gray-100 rounded-sm p-2 bg-white resize-none"
           />
-        </footer>
+        </div>
       </main>
     </div>
   );

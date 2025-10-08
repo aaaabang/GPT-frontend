@@ -25,7 +25,7 @@ const buttonList = [
   { id: 3, label: "按钮3" },
 ];
 
-function Sidebar() {
+function Sidebar({ messages, setMessages }) {
   const [selectedIdx, setSelectedIdx] = useState(null);
   const [deletedFlag, setDeletedFlag] = useState(false);
 
@@ -83,7 +83,14 @@ function Sidebar() {
   return (
     <div className="flex flex-col w-full h-full  bg-primary-400 justify-between">
       <div className="flex flex-col space-y-2 h-0 flex-1 min-h-0">
-        <button className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300">
+        <button
+          className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300"
+          onClick={() => {
+            setSelectedIdx(null);
+            setDeletedFlag(false); // 新建聊天时重置删除确认状态
+            setMessages([]);
+          }}
+        >
           <img src={plusIcon} alt="plus" className="w-4 h-4 mr-2" />
           New Chat
         </button>

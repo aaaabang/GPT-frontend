@@ -25,6 +25,16 @@ function MessageItem({ sender, text }) {
 }
 
 function MessageList({ messages }) {
+  if (!messages || messages.length === 0) {
+    return (
+      <div className="flex h-full w-full items-center justify-center text-gray-500">
+        <span className="font-bold text-lg">
+          Start the conversation by typing a message below.
+        </span>
+      </div>
+    );
+  }
+
   const bottomRef = useRef(null);
   useEffect(() => {
     if (bottomRef.current) {

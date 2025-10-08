@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import userIcon from "./assets/user.svg";
 import gptIcon from "./assets/gpt.svg";
 
@@ -25,12 +25,18 @@ function MessageItem({ sender, text }) {
 }
 
 function MessageList({ messages }) {
+  const bottomRef = useRef(null);
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
   return (
     <div className="flex-1 min-h-0 overflow-auto flex flex-col">
       {messages.map((msg, index) => (
         <MessageItem key={index} sender={msg.sender} text={msg.text} />
       ))}
-      <div className="h-35 flex-shrink-0"></div>
+      <div ref={bottomRef} className="h-35 flex-shrink-0"></div>
     </div>
   );
 }

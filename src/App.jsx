@@ -16,11 +16,80 @@ export default function App() {
     setMessages([...messages, { sender: "user", text: inputValue }]);
     setInputValue("");
 
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { sender: "bot", text: "" },
-    ]);
+    streamOpenAIRequest();
   };
+
+  const API_KEY = "<YOUR_API_KEY>"; // ⚠️ Put your API key here
+
+  async function streamOpenAIRequest() {
+    // const botResponse = messages[messages.length - 1]?.text;
+    const response = await fetch("https://api.deepseek.com/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "deepseek-chat", // 可以换成你要的模型
+        messages: [
+          { role: "system", content: "You are a helpful assistant." },
+          { role: "user", content: inputValue.trim() },
+        ],
+        stream: true, // 开启流式响应
+      }),
+    });
+
+    if (!response.body) {
+      console.error("ReadableStream not supported or no body returned");
+      return;
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+    let result = "";
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      // 将字节解码为字符串
+      const chunk = decoder.decode(value, { stream: true });
+
+      chunk.split("\n").forEach((line) => {
+        line = line.trim();
+        if (line.startsWith("data: ")) {
+          const dataStr = line.replace("data: ", "").trim();
+          if (dataStr === "[DONE]") return;
+
+          try {
+            const data = JSON.parse(dataStr);
+            const content = data.choices[0].delta?.content;
+            if (content) {
+              result += content;
+              setMessages((prevMessages) => {
+                const newMessages = [...prevMessages];
+                if (newMessages[newMessages.length - 1].sender !== "bot") {
+                  newMessages.push({ sender: "bot", text: result });
+                } else {
+                  newMessages[newMessages.length - 1] = {
+                    ...newMessages[newMessages.length - 1],
+                    text: result,
+                  };
+                }
+                return newMessages;
+              });
+              // 这里可以实时显示在页面上
+              console.log(content);
+            }
+          } catch (err) {
+            console.error("JSON parse error", err);
+          }
+        }
+      });
+    }
+
+    console.log("Final result:", result);
+  }
 
   return (
     <div className="flex w-screen h-screen">

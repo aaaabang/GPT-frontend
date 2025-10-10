@@ -7,33 +7,21 @@ import checkIcon from "./assets/check.svg";
 import xIcon from "./assets/x.svg";
 import { useState } from "react";
 
-const buttonList = [
-  { id: 1, label: "按钮1" },
-  { id: 2, label: "按钮2" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-  { id: 3, label: "按钮3" },
-];
-
-function Sidebar({ messages, setMessages }) {
-  const [selectedIdx, setSelectedIdx] = useState(null);
+function Sidebar({
+  messages,
+  setMessages,
+  currentSessionId,
+  setCurrentSessionId,
+  history,
+  setHistory,
+}) {
   const [deletedFlag, setDeletedFlag] = useState(false);
 
   // 右侧按钮配置
   const rightButtons = [
     {
-      show: (selectedIdx, idx, deletedFlag) =>
-        selectedIdx === idx && !deletedFlag,
+      show: (currentSessionId, idx, deletedFlag) =>
+        currentSessionId === idx && !deletedFlag,
       buttons: [
         {
           icon: editIcon,
@@ -55,8 +43,8 @@ function Sidebar({ messages, setMessages }) {
       ],
     },
     {
-      show: (selectedIdx, idx, deletedFlag) =>
-        selectedIdx === idx && deletedFlag,
+      show: (currentSessionId, idx, deletedFlag) =>
+        currentSessionId === idx && deletedFlag,
       buttons: [
         {
           icon: checkIcon,
@@ -64,6 +52,10 @@ function Sidebar({ messages, setMessages }) {
           onClick: (e, idx) => {
             e.stopPropagation();
             console.log("delete confirm click", idx);
+            const newHistory = history.filter((_, hIdx) => hIdx !== idx);
+            setHistory(newHistory);
+            setMessages([]);
+            setCurrentSessionId(null);
             setDeletedFlag(false);
           },
         },
@@ -86,7 +78,7 @@ function Sidebar({ messages, setMessages }) {
         <button
           className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300"
           onClick={() => {
-            setSelectedIdx(null);
+            setCurrentSessionId(null);
             setDeletedFlag(false); // 新建聊天时重置删除确认状态
             setMessages([]);
           }}
@@ -96,25 +88,26 @@ function Sidebar({ messages, setMessages }) {
         </button>
         {/* 根据 list 渲染按钮 */}
         <div className="flex-1 min-h-0 overflow-auto flex flex-col space-y-2">
-          {buttonList.map((item, idx) => (
+          {history.map((item, idx) => (
             <button
               key={idx}
               className={`flex items-center p-2 rounded-sm text-black hover:bg-primary-300 justify-between ${
-                selectedIdx === idx ? "bg-primary-200" : "bg-primary-400"
+                currentSessionId === idx ? "bg-primary-200" : "bg-primary-400"
               }`}
               onClick={() => {
-                setSelectedIdx(idx);
+                setCurrentSessionId(idx);
+                setMessages(item.messages);
                 setDeletedFlag(false); // 切换按钮时重置删除确认状态
                 console.log("selectedIdx", idx);
               }}
             >
               <div className="flex items-center">
                 <img src={messageIcon} alt="message" className="w-4 h-4 mr-2" />
-                {item.label}
+                {"Chat " + (idx + 1)}
               </div>
               {rightButtons.map(
                 (group, gIdx) =>
-                  group.show(selectedIdx, idx, deletedFlag) && (
+                  group.show(currentSessionId, idx, deletedFlag) && (
                     <div
                       className="flex items-center space-x-1 ml-2"
                       key={gIdx}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -10,15 +10,39 @@ import sendIcon from "./assets/send.svg";
 export default function App() {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [currentSessionId, setCurrentSessionId] = useState(-1);
 
   const handleSendMessage = () => {
     if (inputValue.trim() === "") return; // 防止发送空消息
-    setMessages([...messages, { sender: "user", text: inputValue }]);
+
+    const userMsg = { sender: "user", text: inputValue };
+    //update history
+    const hisLength = history.length;
+    if (messages.length === 0) {
+      console.log("Creating new session");
+      const newId = history.length + 1;
+      setCurrentSessionId(newId);
+
+      const newSession = {
+        title: `Chat ${newId}`,
+        messages: [userMsg],
+      };
+      setHistory([...history, newSession]);
+    } else {
+      history[currentSessionId - 1].messages.push(userMsg);
+      setHistory([...history]);
+    }
+
+    setMessages([...messages, userMsg]);
     setInputValue("");
 
     streamOpenAIRequest();
   };
 
+  useEffect(() => {
+    console.log("messages updated:", messages);
+  }, [messages]);
   const API_KEY = "<YOUR_API_KEY>"; // ⚠️ Put your API key here
 
   async function streamOpenAIRequest() {
@@ -91,17 +115,26 @@ export default function App() {
     console.log("Final result:", result);
   }
 
+  const currentSession = history.find((s) => s.id === currentSessionId);
+
   return (
     <div className="flex w-screen h-screen">
       <div className="flex w-80 h-full p-2 bg-primary-400 ">
-        <Sidebar messages={messages} setMessages={setMessages} />
+        <Sidebar
+          messages={messages}
+          setMessages={setMessages}
+          currentSessionId={currentSessionId}
+          setCurrentSessionId={setCurrentSessionId}
+          history={history}
+          setHistory={setHistory}
+        />
       </div>
 
       {/* 右侧聊天窗口 */}
       <main className="flex w-full flex-col items-stretch relative bg-transparent">
         {/* 消息列表（可滚动） */}
-        <MessageList messages={messages} />
-
+        {/* TODO: MessageList messages={currentSession?.messages || []} App.jsx:142 Internal React error: Expected static flag was missing. Please notify the React team.*/}
+        <MessageList messages={messages || []} />
         {/* 输入框只在聊天区底部固定，不遮盖 sidebar */}
         <div className="absolute bottom-0 left-0 right-0 flex bg-transparent backdrop-blur px-30 pb-10 items-center ">
           <textarea
@@ -111,13 +144,12 @@ export default function App() {
             onChange={(e) => setInputValue(e.target.value)}
           />
           <button
-            className="ml-2 mb-1 p-2 rounded bg-primary-300 hover:bg-primary-400 flex items-center justify-center"
+            className="ml-2 mb-1 p-2 rounded bg-primary-300 hover:bg-primary-400 flex justify-center items-center"
             style={{ height: "40px" }}
             onClick={() => {
               handleSendMessage();
             }}
             aria-label="Send"
-            items-center
           >
             <img src={sendIcon} alt="send" className="w-4 h-4" />
           </button>

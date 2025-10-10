@@ -34,7 +34,6 @@ function MessageList({ messages }) {
       </div>
     );
   }
-
   const bottomRef = useRef(null);
   useEffect(() => {
     if (bottomRef.current) {

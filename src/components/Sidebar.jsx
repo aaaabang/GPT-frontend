@@ -1,22 +1,23 @@
-import plusIcon from "./assets/plus.svg";
-import settingIcon from "./assets/settings.svg";
-import trashIcon from "./assets/trash-2.svg";
-import messageIcon from "./assets/message-square.svg";
-import editIcon from "./assets/edit.svg";
-import checkIcon from "./assets/check.svg";
-import xIcon from "./assets/x.svg";
-import useStore from "./store";
+import { useState } from "react";
+import plusIcon from "../assets/plus.svg";
+import settingIcon from "../assets/settings.svg";
+import trashIcon from "../assets/trash-2.svg";
+import messageIcon from "../assets/message-square.svg";
+import editIcon from "../assets/edit.svg";
+import checkIcon from "../assets/check.svg";
+import xIcon from "../assets/x.svg";
+import useStore from "../store";
 
 function Sidebar() {
   const {
     history,
     currentSessionId,
-    deletedFlag,
     switchToSession,
     startNewChat,
     deleteSession,
-    setDeletedFlag,
   } = useStore();
+
+  const [deletedFlag, setDeletedFlag] = useState(false);
 
   // 右侧按钮配置
   const rightButtons = [
@@ -54,6 +55,7 @@ function Sidebar() {
             e.stopPropagation();
             console.log("delete confirm click", idx);
             deleteSession(idx);
+            setDeletedFlag(false);
           },
         },
         {
@@ -76,6 +78,7 @@ function Sidebar() {
           className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300"
           onClick={() => {
             startNewChat();
+            setDeletedFlag(false);
           }}
         >
           <img src={plusIcon} alt="plus" className="w-4 h-4 mr-2" />
@@ -91,12 +94,13 @@ function Sidebar() {
               }`}
               onClick={() => {
                 switchToSession(idx);
+                setDeletedFlag(false);
                 console.log("selectedIdx", idx);
               }}
             >
               <div className="flex items-center">
                 <img src={messageIcon} alt="message" className="w-4 h-4 mr-2" />
-                {item.title}
+                {"Chat " + (idx + 1)}
               </div>
               {rightButtons.map(
                 (group, gIdx) =>

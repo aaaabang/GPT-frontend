@@ -10,9 +10,6 @@ const useStore = create((set, get) => ({
   // 输入框的值
   inputValue: "",
 
-  // UI状态
-  deletedFlag: false,
-
   // Actions
   // 设置输入框的值
   setInputValue: (value) => set({ inputValue: value }),
@@ -71,7 +68,6 @@ const useStore = create((set, get) => ({
   switchToSession: (sessionId) => {
     set({
       currentSessionId: sessionId,
-      deletedFlag: false,
     });
   },
 
@@ -79,7 +75,6 @@ const useStore = create((set, get) => ({
   startNewChat: () => {
     set({
       currentSessionId: null,
-      deletedFlag: false,
       inputValue: "",
     });
   },
@@ -97,12 +92,8 @@ const useStore = create((set, get) => ({
           : currentSessionId > sessionId
           ? currentSessionId - 1
           : currentSessionId,
-      deletedFlag: false,
     });
   },
-
-  // 设置删除确认状态
-  setDeletedFlag: (flag) => set({ deletedFlag: flag }),
 
   // 获取当前session的messages（计算属性）
   getCurrentMessages: () => {

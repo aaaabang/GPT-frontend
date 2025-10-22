@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
-import userIcon from "./assets/user.svg";
-import gptIcon from "./assets/gpt.svg";
+import userIcon from "../assets/user.svg";
+import gptIcon from "../assets/gpt.svg";
 
 //MessageItem component
 function MessageItem({ sender, text }) {

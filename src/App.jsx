@@ -1,13 +1,28 @@
+import { useEffect } from "react";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import MessageList from "./components/MessageList";
 import ChatInput from "./components/ChatInput";
 import Settings from "./components/Settings";
+import PersistenceStatus from "./components/PersistenceStatus";
 import useStore from "./store";
+import { refreshApiConfig } from "./config/api";
 
 export default function App() {
-  const { getCurrentMessages, isSettingsOpen, closeSettings } = useStore();
+  const { getCurrentMessages, isSettingsOpen, closeSettings, getSettings } =
+    useStore();
   const currentMessages = getCurrentMessages();
+
+  // 应用初始化时同步设置到API配置
+  useEffect(() => {
+    // 刷新API配置以确保使用最新的持久化设置
+    refreshApiConfig();
+
+    // 可选：打印加载状态到控制台（开发时有用）
+    console.log("App initialized with persistent data:");
+    console.log("- Chat history loaded from localStorage");
+    console.log("- Settings loaded from localStorage");
+  }, []);
 
   return (
     <div className="flex w-screen h-screen">

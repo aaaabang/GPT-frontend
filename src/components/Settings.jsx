@@ -50,7 +50,7 @@ function Settings({ isOpen, onClose }) {
 
   const handleReset = () => {
     // 重置为默认值
-    setApiKey("sk-edf922383b18408e8edf02fd7ec00cf8");
+    setApiKey("");
     setBaseUrl("https://api.deepseek.com/chat/completions");
     setModel("deepseek-chat");
     setSystemMessage("You are a helpful assistant.");
@@ -63,7 +63,7 @@ function Settings({ isOpen, onClose }) {
       className="fixed inset-0 flex items-center justify-center z-50"
       style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
     >
-      <div className="bg-white rounded-lg shadow-xl w-96 max-w-md p-6 max-h-96 overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-xl w-[500px] max-w-2xl p-8">
         {/* 标题栏 */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-800">API Settings</h2>
@@ -86,7 +86,6 @@ function Settings({ isOpen, onClose }) {
               API Key
             </label>
             <input
-              type="password"
               id="apiKey"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
@@ -128,11 +127,7 @@ function Settings({ isOpen, onClose }) {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="deepseek-chat">DeepSeek Chat</option>
-              <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-              <option value="gpt-4">GPT-4</option>
-              <option value="gpt-4-turbo">GPT-4 Turbo</option>
-              <option value="claude-3-sonnet">Claude-3 Sonnet</option>
-              <option value="claude-3-opus">Claude-3 Opus</option>
+              <option value="deepseek-reasoner">DeepSeek Reasoner</option>
             </select>
           </div>
 

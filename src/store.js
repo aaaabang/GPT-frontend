@@ -10,9 +10,16 @@ const useStore = create((set, get) => ({
   // 输入框的值
   inputValue: "",
 
+  // 设置窗口的打开状态
+  isSettingsOpen: false,
+
   // Actions
   // 设置输入框的值
   setInputValue: (value) => set({ inputValue: value }),
+
+  // 打开/关闭设置窗口
+  openSettings: () => set({ isSettingsOpen: true }),
+  closeSettings: () => set({ isSettingsOpen: false }),
 
   // 创建新的聊天session
   createNewSession: (userMessage) => {

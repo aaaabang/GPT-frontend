@@ -16,6 +16,7 @@ function Sidebar() {
     startNewChat,
     deleteSession,
     setSessionTitle,
+    openSettings,
   } = useStore();
 
   const [deletedFlag, setDeletedFlag] = useState(false);
@@ -179,7 +180,10 @@ function Sidebar() {
           <img src={trashIcon} alt="trash" className="w-4 h-4 mr-2" />
           Local Storage
         </button>
-        <button className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300">
+        <button
+          className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300"
+          onClick={openSettings}
+        >
           <img src={settingIcon} alt="settings" className="w-4 h-4 mr-2" />
           Settings
         </button>

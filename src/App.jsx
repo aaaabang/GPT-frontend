@@ -2,10 +2,11 @@ import "./App.css";
 import Sidebar from "./components/Sidebar";
 import MessageList from "./components/MessageList";
 import ChatInput from "./components/ChatInput";
+import Settings from "./components/Settings";
 import useStore from "./store";
 
 export default function App() {
-  const { getCurrentMessages } = useStore();
+  const { getCurrentMessages, isSettingsOpen, closeSettings } = useStore();
   const currentMessages = getCurrentMessages();
 
   return (
@@ -21,6 +22,9 @@ export default function App() {
         {/* 输入框组件 */}
         <ChatInput />
       </main>
+
+      {/* 设置窗口 */}
+      <Settings isOpen={isSettingsOpen} onClose={closeSettings} />
     </div>
   );
 }

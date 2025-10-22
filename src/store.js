@@ -45,13 +45,13 @@ const useStore = create((set, get) => ({
     set({ history: newHistory });
   },
 
-  // 更新当前session的最后一条消息（用于流式响应）
-  updateLastMessage: (newText) => {
-    const { history, currentSessionId } = get();
-    if (currentSessionId === null) return;
+  // 更新指定session的最后一条消息（用于流式响应）
+  updateLastMessage: (sessionId, newText) => {
+    const { history } = get();
+    if (sessionId === null || sessionId >= history.length) return;
 
     const newHistory = [...history];
-    const currentMessages = newHistory[currentSessionId].messages;
+    const currentMessages = newHistory[sessionId].messages;
 
     if (
       currentMessages.length > 0 &&

@@ -24,23 +24,25 @@ export default function App() {
 
     const userMsg = { sender: "user", text: inputValue };
     const inputText = inputValue.trim();
+    let targetSessionId;
 
     // 如果没有当前session，创建新的session
     if (currentSessionId === null) {
       console.log("Creating new session");
-      createNewSession(userMsg);
+      targetSessionId = createNewSession(userMsg);
     } else {
       // 否则添加到当前session
       addMessageToCurrentSession(userMsg);
+      targetSessionId = currentSessionId;
     }
 
     setInputValue("");
-    streamOpenAIRequest(inputText);
+    streamOpenAIRequest(inputText, targetSessionId);
   };
 
   const API_KEY = "sk-edf922383b18408e8edf02fd7ec00cf8"; // ⚠️ Put your API key here
 
-  async function streamOpenAIRequest(inputText) {
+  async function streamOpenAIRequest(inputText, targetSessionId) {
     const response = await fetch("https://api.deepseek.com/chat/completions", {
       method: "POST",
       headers: {
@@ -73,6 +75,7 @@ export default function App() {
       // 将字节解码为字符串
       const chunk = decoder.decode(value, { stream: true });
 
+      // console.log("Received chunk:", chunk);
       chunk.split("\n").forEach((line) => {
         line = line.trim();
         if (line.startsWith("data: ")) {
@@ -84,7 +87,7 @@ export default function App() {
             const content = data.choices[0].delta?.content;
             if (content) {
               result += content;
-              updateLastMessage(result);
+              updateLastMessage(targetSessionId, result);
               // 这里可以实时显示在页面上
               console.log(content);
             }

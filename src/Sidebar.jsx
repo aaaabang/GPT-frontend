@@ -96,7 +96,7 @@ function Sidebar() {
             >
               <div className="flex items-center">
                 <img src={messageIcon} alt="message" className="w-4 h-4 mr-2" />
-                {"Chat " + (idx + 1)}
+                {item.title}
               </div>
               {rightButtons.map(
                 (group, gIdx) =>

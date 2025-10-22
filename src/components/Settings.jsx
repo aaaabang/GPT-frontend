@@ -59,7 +59,10 @@ function Settings({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50">
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50"
+      style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
+    >
       <div className="bg-white rounded-lg shadow-xl w-96 max-w-md p-6 max-h-96 overflow-y-auto">
         {/* 标题栏 */}
         <div className="flex items-center justify-between mb-4">

@@ -5,17 +5,18 @@ import messageIcon from "./assets/message-square.svg";
 import editIcon from "./assets/edit.svg";
 import checkIcon from "./assets/check.svg";
 import xIcon from "./assets/x.svg";
-import { useState } from "react";
+import useStore from "./store";
 
-function Sidebar({
-  messages,
-  setMessages,
-  currentSessionId,
-  setCurrentSessionId,
-  history,
-  setHistory,
-}) {
-  const [deletedFlag, setDeletedFlag] = useState(false);
+function Sidebar() {
+  const {
+    history,
+    currentSessionId,
+    deletedFlag,
+    switchToSession,
+    startNewChat,
+    deleteSession,
+    setDeletedFlag,
+  } = useStore();
 
   // 右侧按钮配置
   const rightButtons = [
@@ -52,11 +53,7 @@ function Sidebar({
           onClick: (e, idx) => {
             e.stopPropagation();
             console.log("delete confirm click", idx);
-            const newHistory = history.filter((_, hIdx) => hIdx !== idx);
-            setHistory(newHistory);
-            setMessages([]);
-            setCurrentSessionId(null);
-            setDeletedFlag(false);
+            deleteSession(idx);
           },
         },
         {
@@ -78,9 +75,7 @@ function Sidebar({
         <button
           className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300"
           onClick={() => {
-            setCurrentSessionId(null);
-            setDeletedFlag(false); // 新建聊天时重置删除确认状态
-            setMessages([]);
+            startNewChat();
           }}
         >
           <img src={plusIcon} alt="plus" className="w-4 h-4 mr-2" />
@@ -95,9 +90,7 @@ function Sidebar({
                 currentSessionId === idx ? "bg-primary-200" : "bg-primary-400"
               }`}
               onClick={() => {
-                setCurrentSessionId(idx);
-                setMessages(item.messages);
-                setDeletedFlag(false); // 切换按钮时重置删除确认状态
+                switchToSession(idx);
                 console.log("selectedIdx", idx);
               }}
             >

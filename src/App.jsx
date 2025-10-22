@@ -4,49 +4,43 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import Sidebar from "./Sidebar";
 import MessageList from "./MessageList";
+import useStore from "./store";
 
 import sendIcon from "./assets/send.svg";
 // App.jsx
 export default function App() {
-  const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [currentSessionId, setCurrentSessionId] = useState(-1);
+  const {
+    inputValue,
+    setInputValue,
+    currentSessionId,
+    createNewSession,
+    addMessageToCurrentSession,
+    updateLastMessage,
+    getCurrentMessages,
+  } = useStore();
 
   const handleSendMessage = () => {
     if (inputValue.trim() === "") return; // 防止发送空消息
 
     const userMsg = { sender: "user", text: inputValue };
-    //update history
-    const hisLength = history.length;
-    if (messages.length === 0) {
+    const inputText = inputValue.trim();
+    
+    // 如果没有当前session，创建新的session
+    if (currentSessionId === null) {
       console.log("Creating new session");
-      const newId = history.length + 1;
-      setCurrentSessionId(newId);
-
-      const newSession = {
-        title: `Chat ${newId}`,
-        messages: [userMsg],
-      };
-      setHistory([...history, newSession]);
+      createNewSession(userMsg);
     } else {
-      history[currentSessionId - 1].messages.push(userMsg);
-      setHistory([...history]);
+      // 否则添加到当前session
+      addMessageToCurrentSession(userMsg);
     }
 
-    setMessages([...messages, userMsg]);
     setInputValue("");
-
-    streamOpenAIRequest();
+    streamOpenAIRequest(inputText);
   };
 
-  useEffect(() => {
-    console.log("messages updated:", messages);
-  }, [messages]);
-  const API_KEY = "<YOUR_API_KEY>"; // ⚠️ Put your API key here
+  const API_KEY = "sk-edf922383b18408e8edf02fd7ec00cf8"; // ⚠️ Put your API key here
 
-  async function streamOpenAIRequest() {
-    // const botResponse = messages[messages.length - 1]?.text;
+  async function streamOpenAIRequest(inputText) {
     const response = await fetch("https://api.deepseek.com/chat/completions", {
       method: "POST",
       headers: {
@@ -57,7 +51,7 @@ export default function App() {
         model: "deepseek-chat", // 可以换成你要的模型
         messages: [
           { role: "system", content: "You are a helpful assistant." },
-          { role: "user", content: inputValue.trim() },
+          { role: "user", content: inputText },
         ],
         stream: true, // 开启流式响应
       }),
@@ -90,18 +84,7 @@ export default function App() {
             const content = data.choices[0].delta?.content;
             if (content) {
               result += content;
-              setMessages((prevMessages) => {
-                const newMessages = [...prevMessages];
-                if (newMessages[newMessages.length - 1].sender !== "bot") {
-                  newMessages.push({ sender: "bot", text: result });
-                } else {
-                  newMessages[newMessages.length - 1] = {
-                    ...newMessages[newMessages.length - 1],
-                    text: result,
-                  };
-                }
-                return newMessages;
-              });
+              updateLastMessage(result);
               // 这里可以实时显示在页面上
               console.log(content);
             }
@@ -115,26 +98,18 @@ export default function App() {
     console.log("Final result:", result);
   }
 
-  const currentSession = history.find((s) => s.id === currentSessionId);
+  const currentMessages = getCurrentMessages();
 
   return (
     <div className="flex w-screen h-screen">
       <div className="flex w-80 h-full p-2 bg-primary-400 ">
-        <Sidebar
-          messages={messages}
-          setMessages={setMessages}
-          currentSessionId={currentSessionId}
-          setCurrentSessionId={setCurrentSessionId}
-          history={history}
-          setHistory={setHistory}
-        />
+        <Sidebar />
       </div>
 
       {/* 右侧聊天窗口 */}
       <main className="flex w-full flex-col items-stretch relative bg-transparent">
         {/* 消息列表（可滚动） */}
-        {/* TODO: MessageList messages={currentSession?.messages || []} App.jsx:142 Internal React error: Expected static flag was missing. Please notify the React team.*/}
-        <MessageList messages={messages || []} />
+        <MessageList messages={currentMessages} />
         {/* 输入框只在聊天区底部固定，不遮盖 sidebar */}
         <div className="absolute bottom-0 left-0 right-0 flex bg-transparent backdrop-blur px-30 pb-10 items-center ">
           <textarea

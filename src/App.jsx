@@ -24,7 +24,7 @@ export default function App() {
 
     const userMsg = { sender: "user", text: inputValue };
     const inputText = inputValue.trim();
-    
+
     // 如果没有当前session，创建新的session
     if (currentSessionId === null) {
       console.log("Creating new session");

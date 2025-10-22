@@ -1,22 +1,22 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 const useStore = create((set, get) => ({
   // 聊天历史 - 每个session包含title和messages
   history: [],
-  
+
   // 当前选中的session ID
   currentSessionId: null,
-  
+
   // 输入框的值
-  inputValue: '',
-  
+  inputValue: "",
+
   // UI状态
   deletedFlag: false,
 
   // Actions
   // 设置输入框的值
   setInputValue: (value) => set({ inputValue: value }),
-  
+
   // 创建新的聊天session
   createNewSession: (userMessage) => {
     const { history } = get();
@@ -25,78 +25,85 @@ const useStore = create((set, get) => ({
       title: `Chat ${newSessionId + 1}`,
       messages: [userMessage],
     };
-    
+
     set({
       history: [...history, newSession],
       currentSessionId: newSessionId,
     });
-    
+
     return newSessionId;
   },
-  
+
   // 向当前session添加消息
   addMessageToCurrentSession: (message) => {
     const { history, currentSessionId } = get();
     if (currentSessionId === null) return;
-    
+
     const newHistory = [...history];
     newHistory[currentSessionId].messages.push(message);
-    
+
     set({ history: newHistory });
   },
-  
+
   // 更新当前session的最后一条消息（用于流式响应）
   updateLastMessage: (newText) => {
     const { history, currentSessionId } = get();
     if (currentSessionId === null) return;
-    
+
     const newHistory = [...history];
     const currentMessages = newHistory[currentSessionId].messages;
-    
-    if (currentMessages.length > 0 && currentMessages[currentMessages.length - 1].sender === 'bot') {
+
+    if (
+      currentMessages.length > 0 &&
+      currentMessages[currentMessages.length - 1].sender === "bot"
+    ) {
       // 更新最后一条bot消息
       currentMessages[currentMessages.length - 1].text = newText;
     } else {
       // 添加新的bot消息
-      currentMessages.push({ sender: 'bot', text: newText });
+      currentMessages.push({ sender: "bot", text: newText });
     }
-    
+
     set({ history: newHistory });
   },
-  
+
   // 切换到指定的session
   switchToSession: (sessionId) => {
-    set({ 
+    set({
       currentSessionId: sessionId,
-      deletedFlag: false 
+      deletedFlag: false,
     });
   },
-  
+
   // 新建聊天（清空当前选中）
   startNewChat: () => {
-    set({ 
+    set({
       currentSessionId: null,
       deletedFlag: false,
-      inputValue: ''
+      inputValue: "",
     });
   },
-  
+
   // 删除session
   deleteSession: (sessionId) => {
     const { history, currentSessionId } = get();
     const newHistory = history.filter((_, index) => index !== sessionId);
-    
+
     set({
       history: newHistory,
-      currentSessionId: currentSessionId === sessionId ? null : 
-        (currentSessionId > sessionId ? currentSessionId - 1 : currentSessionId),
-      deletedFlag: false
+      currentSessionId:
+        currentSessionId === sessionId
+          ? null
+          : currentSessionId > sessionId
+          ? currentSessionId - 1
+          : currentSessionId,
+      deletedFlag: false,
     });
   },
-  
+
   // 设置删除确认状态
   setDeletedFlag: (flag) => set({ deletedFlag: flag }),
-  
+
   // 获取当前session的messages（计算属性）
   getCurrentMessages: () => {
     const { history, currentSessionId } = get();

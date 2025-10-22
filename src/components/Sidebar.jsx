@@ -15,11 +15,13 @@ function Sidebar() {
     switchToSession,
     startNewChat,
     deleteSession,
+    setSessionTitle,
   } = useStore();
 
   const [deletedFlag, setDeletedFlag] = useState(false);
+  const [editingIdx, setEditingIdx] = useState(null);
+  const [editingTitle, setEditingTitle] = useState("");
 
-  // 右侧按钮配置
   const rightButtons = [
     {
       show: (currentSessionId, idx, deletedFlag) =>
@@ -30,7 +32,8 @@ function Sidebar() {
           alt: "edit",
           onClick: (e, idx) => {
             e.stopPropagation();
-            console.log("edit click", idx);
+            setEditingIdx(idx);
+            setEditingTitle(history[idx].title);
           },
         },
         {
@@ -79,6 +82,7 @@ function Sidebar() {
           onClick={() => {
             startNewChat();
             setDeletedFlag(false);
+            setEditingIdx(null);
           }}
         >
           <img src={plusIcon} alt="plus" className="w-4 h-4 mr-2" />
@@ -95,33 +99,75 @@ function Sidebar() {
               onClick={() => {
                 switchToSession(idx);
                 setDeletedFlag(false);
+                setEditingIdx(null);
                 console.log("selectedIdx", idx);
               }}
             >
               <div className="flex items-center">
                 <img src={messageIcon} alt="message" className="w-4 h-4 mr-2" />
-                {"Chat " + (idx + 1)}
+                {editingIdx === idx ? (
+                  <input
+                    className="border rounded px-1 py-0.5 w-24 text-black"
+                    value={editingTitle}
+                    autoFocus
+                    onChange={(e) => setEditingTitle(e.target.value)}
+                  />
+                ) : (
+                  item.title
+                )}
               </div>
-              {rightButtons.map(
-                (group, gIdx) =>
-                  group.show(currentSessionId, idx, deletedFlag) && (
-                    <div
-                      className="flex items-center space-x-1 ml-2"
-                      key={gIdx}
-                    >
-                      {group.buttons.map(({ icon, alt, onClick }, bIdx) => (
-                        <span
-                          key={alt}
-                          role="button"
-                          tabIndex={0}
-                          className="opacity-100 hover:bg-primary-100 cursor-pointer p-1 rounded"
-                          onClick={(e) => onClick(e, idx)}
-                        >
-                          <img src={icon} alt={alt} className="w-4 h-4" />
-                        </span>
-                      ))}
-                    </div>
-                  )
+              {editingIdx === idx ? (
+                <div className="flex items-center space-x-1 ml-2">
+                  <span
+                    key="edit-confirm"
+                    role="button"
+                    tabIndex={0}
+                    className="opacity-100 hover:bg-primary-100 cursor-pointer p-1 rounded"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSessionTitle(idx, editingTitle);
+                      setEditingIdx(null);
+                      setEditingTitle("");
+                    }}
+                  >
+                    <img src={checkIcon} alt="confirm" className="w-4 h-4" />
+                  </span>
+                  <span
+                    key="edit-cancel"
+                    role="button"
+                    tabIndex={0}
+                    className="opacity-100 hover:bg-primary-100 cursor-pointer p-1 rounded"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingIdx(null);
+                      setEditingTitle("");
+                    }}
+                  >
+                    <img src={xIcon} alt="cancel" className="w-4 h-4" />
+                  </span>
+                </div>
+              ) : (
+                rightButtons.map(
+                  (group, gIdx) =>
+                    group.show(currentSessionId, idx, deletedFlag) && (
+                      <div
+                        className="flex items-center space-x-1 ml-2"
+                        key={gIdx}
+                      >
+                        {group.buttons.map(({ icon, alt, onClick }, bIdx) => (
+                          <span
+                            key={alt}
+                            role="button"
+                            tabIndex={0}
+                            className="opacity-100 hover:bg-primary-100 cursor-pointer p-1 rounded"
+                            onClick={(e) => onClick(e, idx)}
+                          >
+                            <img src={icon} alt={alt} className="w-4 h-4" />
+                          </span>
+                        ))}
+                      </div>
+                    )
+                )
               )}
             </button>
           ))}

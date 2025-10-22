@@ -101,6 +101,15 @@ const useStore = create((set, get) => ({
     if (currentSessionId === null) return [];
     return history[currentSessionId]?.messages || [];
   },
+
+  // 新增：设置指定session的标题
+  setSessionTitle: (idx, newTitle) => {
+    const { history } = get();
+    if (idx < 0 || idx >= history.length) return;
+    const newHistory = [...history];
+    newHistory[idx] = { ...newHistory[idx], title: newTitle };
+    set({ history: newHistory });
+  },
 }));
 
 export default useStore;

@@ -15,6 +15,7 @@ const ChatInput = () => {
     createNewSession,
     addMessageToCurrentSession,
     updateLastMessage,
+    getCurrentMessages,
   } = useStore();
 
   const [isSending, setIsSending] = useState(false);
@@ -40,7 +41,17 @@ const ChatInput = () => {
     setIsSending(true);
 
     try {
-      await streamOpenAIRequest(inputText, targetSessionId);
+      // 获取当前session的所有消息并转换为OpenAI格式
+      const currentMessages = getCurrentMessages();
+      const messages = [
+        { role: "system", content: API_CONFIG.SYSTEM_MESSAGE },
+        ...currentMessages.map((msg) => ({
+          role: msg.sender === "user" ? "user" : "assistant",
+          content: msg.text,
+        })),
+      ];
+
+      await streamChatbotRequest(messages, targetSessionId);
     } catch (error) {
       console.error("发送消息失败:", error);
     } finally {
@@ -48,12 +59,12 @@ const ChatInput = () => {
     }
   };
 
-  const streamOpenAIRequest = async (inputText, targetSessionId) => {
+  const streamChatbotRequest = async (messages, targetSessionId) => {
     try {
       const response = await fetch(API_CONFIG.BASE_URL, {
         method: "POST",
         headers: getRequestHeaders(),
-        body: JSON.stringify(createChatRequest(inputText)),
+        body: JSON.stringify(createChatRequest(messages)),
       });
 
       if (!response.body) {

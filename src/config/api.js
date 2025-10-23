@@ -49,12 +49,9 @@ export const refreshApiConfig = () => {
     savedSettings.systemMessage || DEFAULT_CONFIG.SYSTEM_MESSAGE;
 };
 
-export const createChatRequest = (inputText) => ({
+export const createChatRequest = (messages) => ({
   model: API_CONFIG.MODEL,
-  messages: [
-    { role: "system", content: API_CONFIG.SYSTEM_MESSAGE },
-    { role: "user", content: inputText },
-  ],
+  messages,
   stream: true,
 });
 

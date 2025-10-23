@@ -1,6 +1,9 @@
 import React, { useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
 import userIcon from "../assets/user.svg";
 import gptIcon from "../assets/gpt.svg";
+import "highlight.js/styles/github.css";
 
 //MessageItem component
 function MessageItem({ sender, text }) {
@@ -9,14 +12,42 @@ function MessageItem({ sender, text }) {
     item = (
       <div className="flex bg-white w-full px-40 py-8">
         <img src={userIcon} alt="user" className="w-6 h-6 mr-4 bg-yellow-200" />
-        <span className="flex-1">{text}</span>
+        <div className="flex-1 whitespace-pre-wrap">{text}</div>
       </div>
     );
   } else {
     item = (
       <div className="flex bg-gray-100 px-40 py-8">
         <img src={gptIcon} alt="gpt" className="w-6 h-6 mr-4 bg-blue-200" />
-        <span className="flex-1">{text}</span>
+        <div className="flex-1 prose prose-sm max-w-none">
+          <ReactMarkdown
+            rehypePlugins={[rehypeHighlight]}
+            components={{
+              code({ node, inline, className, children, ...props }) {
+                const match = /language-(\w+)/.exec(className || "");
+                return !inline && match ? (
+                  <pre className="bg-gray-800 text-white p-3 rounded-md overflow-x-auto">
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  </pre>
+                ) : (
+                  <code
+                    className="bg-gray-200 px-1 py-0.5 rounded text-sm"
+                    {...props}
+                  >
+                    {children}
+                  </code>
+                );
+              },
+              pre({ children, ...props }) {
+                return <div {...props}>{children}</div>;
+              },
+            }}
+          >
+            {text}
+          </ReactMarkdown>
+        </div>
       </div>
     );
   }

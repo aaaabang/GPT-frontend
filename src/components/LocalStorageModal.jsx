@@ -111,19 +111,19 @@ function LocalStorageModal({ isOpen, onClose }) {
               onClick={handleExportData}
               className="px-3 py-2 text-sm text-blue-600 border border-blue-300 rounded-md hover:bg-blue-50 transition-colors"
             >
-              导出数据
+              Export data
             </button>
             <button
               onClick={handleImportData}
               className="px-3 py-2 text-sm text-green-600 border border-green-300 rounded-md hover:bg-green-50 transition-colors"
             >
-              导入数据
+              Import data
             </button>
             <button
               onClick={handleClearData}
               className="px-3 py-2 text-sm text-red-600 border border-red-300 rounded-md hover:bg-red-50 transition-colors"
             >
-              清除所有数据
+              Clear data
             </button>
           </div>
         </div>

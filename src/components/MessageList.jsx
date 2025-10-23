@@ -29,7 +29,7 @@ function MessageList({ messages }) {
     return (
       <div className="flex h-full w-full items-center justify-center text-gray-500">
         <span className="font-bold text-lg">
-          Start the conversation by typing a message below.
+          Before starting, please enter your API key in Settings.
         </span>
       </div>
     );

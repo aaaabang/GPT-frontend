@@ -1,9 +1,12 @@
 import React, { useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import userIcon from "../assets/user.svg";
 import gptIcon from "../assets/gpt.svg";
 import "highlight.js/styles/github.css";
+import "katex/dist/katex.min.css";
 
 //MessageItem component
 function MessageItem({ sender, text }) {
@@ -21,7 +24,8 @@ function MessageItem({ sender, text }) {
         <img src={gptIcon} alt="gpt" className="w-6 h-6 mr-4 bg-blue-200" />
         <div className="flex-1 prose prose-sm max-w-none">
           <ReactMarkdown
-            rehypePlugins={[rehypeHighlight]}
+            remarkPlugins={[remarkMath]}
+            rehypePlugins={[rehypeKatex, rehypeHighlight]}
             components={{
               code({ node, inline, className, children, ...props }) {
                 const match = /language-(\w+)/.exec(className || "");

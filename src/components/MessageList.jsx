@@ -83,7 +83,7 @@ function MessageList({ messages }) {
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = listElement;
       const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-      
+
       // 如果距离底部超过 100px，认为用户向上滚动了
       if (distanceFromBottom > 100) {
         userScrolledUpRef.current = true;
@@ -93,7 +93,7 @@ function MessageList({ messages }) {
       }
     };
 
-    listElement.addEventListener('scroll', handleScroll);
+    listElement.addEventListener("scroll", handleScroll);
 
     // 使用 MutationObserver 监听子节点和内容的变化
     const observer = new MutationObserver(() => {
@@ -116,7 +116,7 @@ function MessageList({ messages }) {
     // 组件卸载时停止监听
     return () => {
       observer.disconnect();
-      listElement.removeEventListener('scroll', handleScroll);
+      listElement.removeEventListener("scroll", handleScroll);
     };
   }, [messages]); // 依赖 messages
 

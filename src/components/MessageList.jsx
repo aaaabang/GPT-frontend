@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useLayoutEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import remarkMath from "remark-math";
@@ -60,6 +60,35 @@ function MessageItem({ sender, text }) {
 }
 
 function MessageList({ messages }) {
+  const listRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const listElement = listRef.current;
+    if (!listElement) return;
+
+    // 立即滚动到底部以应对 messages 数组的直接变化
+    listElement.scrollTop = listElement.scrollHeight;
+
+    // 使用 MutationObserver 监听子节点和内容的变化
+    const observer = new MutationObserver(() => {
+      // 当内容变化导致高度增加时，平滑滚动到底部
+      listElement.scrollTo({
+        top: listElement.scrollHeight,
+        behavior: "smooth",
+      });
+    });
+
+    // 配置 observer 监听子节点列表、子树和字符数据的变化
+    observer.observe(listElement, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+
+    // 组件卸载时停止监听
+    return () => observer.disconnect();
+  }, [messages]); // 初始设置时依赖 messages
+
   if (!messages || messages.length === 0) {
     return (
       <div className="flex h-full w-full items-center justify-center text-gray-500">
@@ -69,18 +98,14 @@ function MessageList({ messages }) {
       </div>
     );
   }
-  const bottomRef = useRef(null);
-  useEffect(() => {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
+
   return (
-    <div className="flex-1 min-h-0 overflow-auto flex flex-col">
+    <div ref={listRef} className="flex-1 min-h-0 overflow-auto flex flex-col">
       {messages.map((msg, index) => (
         <MessageItem key={index} sender={msg.sender} text={msg.text} />
       ))}
-      <div ref={bottomRef} className="h-35 flex-shrink-0"></div>
+      {/* The empty div at the bottom is no longer needed for scrolling */}
+      <div className="h-40 flex-shrink-0"></div>
     </div>
   );
 }

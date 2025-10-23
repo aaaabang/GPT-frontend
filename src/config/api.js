@@ -22,7 +22,7 @@ const loadSavedSettings = () => {
 
 // 默认配置
 const DEFAULT_CONFIG = {
-  API_KEY: "sk-edf922383b18408e8edf02fd7ec00cf8", // ⚠️ Put your API key here
+  API_KEY: "", // ⚠️ Put your API key here
   BASE_URL: "https://api.deepseek.com/chat/completions",
   MODEL: "deepseek-chat",
   SYSTEM_MESSAGE: "You are a helpful assistant.",

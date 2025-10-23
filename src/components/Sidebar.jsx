@@ -7,6 +7,7 @@ import editIcon from "../assets/edit.svg";
 import checkIcon from "../assets/check.svg";
 import xIcon from "../assets/x.svg";
 import useStore from "../store";
+import LocalStorageModal from "./LocalStorageModal";
 
 function Sidebar() {
   const {
@@ -23,6 +24,7 @@ function Sidebar() {
   const [editingIdx, setEditingIdx] = useState(null);
   const [editingTitle, setEditingTitle] = useState("");
 
+  const [isLocalStorageOpen, setLocalStorageOpen] = useState(false);
   const rightButtons = [
     {
       show: (currentSessionId, idx, deletedFlag) =>
@@ -176,10 +178,17 @@ function Sidebar() {
       </div>
       <div className="flex flex-col space-y-2">
         <hr className="bg-gray-500" />
-        <button className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300">
+        <button
+          className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300"
+          onClick={() => setLocalStorageOpen(true)}
+        >
           <img src={trashIcon} alt="trash" className="w-4 h-4 mr-2" />
           Local Storage
         </button>
+        <LocalStorageModal
+          isOpen={isLocalStorageOpen}
+          onClose={() => setLocalStorageOpen(false)}
+        />
         <button
           className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300"
           onClick={openSettings}

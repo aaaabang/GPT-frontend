@@ -61,21 +61,49 @@ function MessageItem({ sender, text }) {
 
 function MessageList({ messages }) {
   const listRef = useRef(null);
+  const userScrolledUpRef = useRef(false); // 记录用户是否向上滚动
+  const previousMessageCountRef = useRef(0); // 记录上一次渲染时的消息数量
 
   useLayoutEffect(() => {
     const listElement = listRef.current;
     if (!listElement) return;
 
-    // 立即滚动到底部以应对 messages 数组的直接变化
-    listElement.scrollTop = listElement.scrollHeight;
+    const currentMessageCount = messages ? messages.length : 0;
+    const isNewMessage = currentMessageCount > previousMessageCountRef.current;
+
+    // 只有在新消息到来且用户没有上滑时，才立即滚动到底部
+    if (isNewMessage && !userScrolledUpRef.current) {
+      listElement.scrollTop = listElement.scrollHeight;
+    }
+
+    // 更新消息数量记录
+    previousMessageCountRef.current = currentMessageCount;
+
+    // 添加滚动事件监听，跟踪用户是否向上滚动
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = listElement;
+      const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+      
+      // 如果距离底部超过 100px，认为用户向上滚动了
+      if (distanceFromBottom > 100) {
+        userScrolledUpRef.current = true;
+      } else {
+        // 用户滚动回底部，重置标记
+        userScrolledUpRef.current = false;
+      }
+    };
+
+    listElement.addEventListener('scroll', handleScroll);
 
     // 使用 MutationObserver 监听子节点和内容的变化
     const observer = new MutationObserver(() => {
-      // 当内容变化导致高度增加时，平滑滚动到底部
-      listElement.scrollTo({
-        top: listElement.scrollHeight,
-        behavior: "smooth",
-      });
+      // 只有当用户没有上滑时，才平滑滚动到底部
+      if (!userScrolledUpRef.current) {
+        listElement.scrollTo({
+          top: listElement.scrollHeight,
+          behavior: "smooth",
+        });
+      }
     });
 
     // 配置 observer 监听子节点列表、子树和字符数据的变化
@@ -86,8 +114,11 @@ function MessageList({ messages }) {
     });
 
     // 组件卸载时停止监听
-    return () => observer.disconnect();
-  }, [messages]); // 初始设置时依赖 messages
+    return () => {
+      observer.disconnect();
+      listElement.removeEventListener('scroll', handleScroll);
+    };
+  }, [messages]); // 依赖 messages
 
   if (!messages || messages.length === 0) {
     return (

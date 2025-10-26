@@ -123,31 +123,33 @@ const ChatInput = () => {
 
       {/* 内容层 */}
       <div className="relative z-10 flex w-full items-center">
-        <textarea
-          placeholder="Type a message..."
-          className="flex h-30 w-full border border-gray-100 rounded-sm p-2 bg-white resize-none shadow-md focus:shadow-lg transition-shadow"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyPress={handleKeyPress}
-          disabled={isSending}
-        />
-        <button
-          className={`ml-2 mb-1 p-2 rounded flex justify-center items-center ${
-            isSending || inputValue.trim() === ""
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-primary-300 hover:bg-primary-400"
-          }`}
-          style={{ height: "40px" }}
-          onClick={handleSendMessage}
-          disabled={isSending || inputValue.trim() === ""}
-          aria-label="Send"
-        >
-          {isSending ? (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-          ) : (
-            <img src={sendIcon} alt="send" className="w-4 h-4" />
-          )}
-        </button>
+        <div className="relative w-full">
+          <textarea
+            placeholder="Type a message..."
+            className="flex h-30 w-full border border-gray-100 rounded-sm p-2 pr-12 bg-white resize-none shadow-md focus:shadow-lg transition-shadow"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={handleKeyPress}
+            disabled={isSending}
+          />
+          <button
+            className={`absolute right-2 bottom-2 p-2 rounded flex justify-center items-center ${
+              isSending || inputValue.trim() === ""
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-primary-300 hover:bg-primary-400"
+            }`}
+            style={{ width: "32px", height: "32px" }}
+            onClick={handleSendMessage}
+            disabled={isSending || inputValue.trim() === ""}
+            aria-label="Send"
+          >
+            {isSending ? (
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              <img src={sendIcon} alt="send" className="w-4 h-4" />
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

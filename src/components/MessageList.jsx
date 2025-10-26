@@ -13,15 +13,19 @@ function MessageItem({ sender, text }) {
   let item = null;
   if (sender === "user") {
     item = (
-      <div className="flex bg-white w-full px-40 py-8">
-        <img src={userIcon} alt="user" className="w-6 h-6 mr-4 bg-yellow-200" />
+      <div className="flex bg-white w-full px-30 py-8">
+        <img
+          src={userIcon}
+          alt="user"
+          className="w-8 h-8 mr-4 bg-yellow-200 p-1"
+        />
         <div className="flex-1 whitespace-pre-wrap">{text}</div>
       </div>
     );
   } else {
     item = (
-      <div className="flex bg-gray-100 px-40 py-8">
-        <img src={gptIcon} alt="gpt" className="w-6 h-6 mr-4 bg-blue-200" />
+      <div className="flex bg-gray-100 px-30 py-8">
+        <img src={gptIcon} alt="gpt" className="w-8 h-8 mr-4 bg-blue-200 p-1" />
         <div className="flex-1 prose prose-sm max-w-none">
           <ReactMarkdown
             remarkPlugins={[remarkMath]}

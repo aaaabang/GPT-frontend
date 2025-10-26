@@ -136,7 +136,7 @@ const ChatInput = () => {
             className={`absolute right-2 bottom-2 p-2 rounded flex justify-center items-center ${
               isSending || inputValue.trim() === ""
                 ? "bg-gray-300 cursor-not-allowed"
-                : "bg-primary-300 hover:bg-primary-400"
+                : "bg-primary-300 hover:bg-primary-400 cursor-pointer"
             }`}
             style={{ width: "32px", height: "32px" }}
             onClick={handleSendMessage}

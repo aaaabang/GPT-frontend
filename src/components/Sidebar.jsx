@@ -81,7 +81,7 @@ function Sidebar() {
     <div className="flex flex-col w-full h-full  bg-primary-400 justify-between">
       <div className="flex flex-col space-y-2 h-0 flex-1 min-h-0">
         <button
-          className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300"
+          className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300 cursor-pointer"
           onClick={() => {
             startNewChat();
             setDeletedFlag(false);
@@ -96,7 +96,7 @@ function Sidebar() {
           {history.map((item, idx) => (
             <button
               key={idx}
-              className={`flex items-center p-2 rounded-sm text-black hover:bg-primary-300 justify-between ${
+              className={`flex items-center p-2 rounded-sm text-black hover:bg-primary-300 justify-between cursor-pointer ${
                 currentSessionId === idx ? "bg-primary-200" : "bg-primary-400"
               }`}
               onClick={() => {
@@ -179,7 +179,7 @@ function Sidebar() {
       <div className="flex flex-col space-y-2">
         <hr className="bg-gray-500" />
         <button
-          className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300"
+          className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300 cursor-pointer"
           onClick={() => setLocalStorageOpen(true)}
         >
           <img src={trashIcon} alt="trash" className="w-4 h-4 mr-2" />
@@ -190,7 +190,7 @@ function Sidebar() {
           onClose={() => setLocalStorageOpen(false)}
         />
         <button
-          className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300"
+          className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300 cursor-pointer"
           onClick={openSettings}
         >
           <img src={settingIcon} alt="settings" className="w-4 h-4 mr-2" />

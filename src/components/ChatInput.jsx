@@ -117,32 +117,38 @@ const ChatInput = () => {
   };
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 flex bg-transparent backdrop-blur px-30 pb-10 items-center">
-      <textarea
-        placeholder="Type a message..."
-        className="flex h-30 w-full border border-gray-100 rounded-sm p-2 bg-white resize-none"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyPress={handleKeyPress}
-        disabled={isSending}
-      />
-      <button
-        className={`ml-2 mb-1 p-2 rounded flex justify-center items-center ${
-          isSending || inputValue.trim() === ""
-            ? "bg-gray-300 cursor-not-allowed"
-            : "bg-primary-300 hover:bg-primary-400"
-        }`}
-        style={{ height: "40px" }}
-        onClick={handleSendMessage}
-        disabled={isSending || inputValue.trim() === ""}
-        aria-label="Send"
-      >
-        {isSending ? (
-          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-        ) : (
-          <img src={sendIcon} alt="send" className="w-4 h-4" />
-        )}
-      </button>
+    <div className="absolute bottom-0 left-0 right-0 flex px-30 pb-10 items-center">
+      {/* 渐变模糊背景层 */}
+      <div className="absolute inset-0 bg-gradient-to-t from-white/100 via-white/40 to-white/0 backdrop-blur-[2px]"></div>
+
+      {/* 内容层 */}
+      <div className="relative z-10 flex w-full items-center">
+        <textarea
+          placeholder="Type a message..."
+          className="flex h-30 w-full border border-gray-100 rounded-sm p-2 bg-white resize-none shadow-md focus:shadow-lg transition-shadow"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={handleKeyPress}
+          disabled={isSending}
+        />
+        <button
+          className={`ml-2 mb-1 p-2 rounded flex justify-center items-center ${
+            isSending || inputValue.trim() === ""
+              ? "bg-gray-300 cursor-not-allowed"
+              : "bg-primary-300 hover:bg-primary-400"
+          }`}
+          style={{ height: "40px" }}
+          onClick={handleSendMessage}
+          disabled={isSending || inputValue.trim() === ""}
+          aria-label="Send"
+        >
+          {isSending ? (
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <img src={sendIcon} alt="send" className="w-4 h-4" />
+          )}
+        </button>
+      </div>
     </div>
   );
 };

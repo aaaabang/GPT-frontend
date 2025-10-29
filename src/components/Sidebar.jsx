@@ -6,6 +6,7 @@ import messageIcon from "../assets/message-square.svg";
 import editIcon from "../assets/edit.svg";
 import checkIcon from "../assets/check.svg";
 import xIcon from "../assets/x.svg";
+import dataBaseIcon from "../assets/database.svg";
 import useStore from "../store";
 import LocalStorageModal from "./LocalStorageModal";
 
@@ -182,7 +183,7 @@ function Sidebar() {
           className="flex items-center p-2 rounded-sm bg-primary-400 text-black border border-black-500 hover:bg-primary-300 cursor-pointer"
           onClick={() => setLocalStorageOpen(true)}
         >
-          <img src={trashIcon} alt="trash" className="w-4 h-4 mr-2" />
+          <img src={dataBaseIcon} alt="database" className="w-4 h-4 mr-2" />
           Local Storage
         </button>
         <LocalStorageModal
